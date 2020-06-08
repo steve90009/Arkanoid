@@ -4,7 +4,7 @@ public class Circle {
 
 	int circleX = 100;
 	int circleY = 100;
-	int speedX = -100;
+	int speedX;
 	int speedY = 100;
 	int circleR = 10;
 
@@ -31,6 +31,9 @@ public class Circle {
 	public void setSpeedX(int speedX) {
 		this.speedX = speedX;
 	}
+	public void changeSpeedX(int delta) {
+		speedX = speedX + delta;
+	}
 
 	public int getSpeedY() {
 		return speedY;
@@ -38,6 +41,9 @@ public class Circle {
 
 	public void setSpeedY(int speedY) {
 		this.speedY = speedY;
+	}
+	public void changeSpeedY(int delta) {
+		speedY = speedY + delta;
 	}
 
 	public int getCircleR() {

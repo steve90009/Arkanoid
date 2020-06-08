@@ -6,7 +6,7 @@ public class Platform {
 	int platformHeight = 20;
 	int platformX;
 	int platformY = 30;
-	int speed = 3;
+	int speed = 300;
 
 	public int getPlatformWidth() {
 		return platformWidth;

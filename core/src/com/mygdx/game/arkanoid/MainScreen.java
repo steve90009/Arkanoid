@@ -51,11 +51,13 @@ public class MainScreen extends ScreenAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		myGame.circle.setCircleX((int) (myGame.circle.getCircleX() + myGame.circle.getSpeedX() * delta));
 		myGame.circle.setCircleY((int) (myGame.circle.getCircleY() + (myGame.circle.getSpeedY() * delta)));
-		System.out.println(myGame.circle.getCircleX());
 
-		movePlattform();
+		movePlattform(delta);
 		checkCollisionBorder();
-		checkCollisionPlattform();
+//		checkCollisionPlattform();
+		if (!checkCollisionPlattform()) {
+			myGame.hittedWithForce = false;
+		}
 
 		myGame.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 		myGame.shapeRenderer.setColor(Color.WHITE);
@@ -104,17 +106,17 @@ public class MainScreen extends ScreenAdapter {
 		}
 	}
 
-	private void movePlattform() {
+	private void movePlattform(float delta) {
 		if (myGame.goLeft && myGame.platform.getPlatformX() > 0) {
-			myGame.platform.setPlatformX(myGame.platform.getPlatformX() - myGame.platform.getSpeed());
+			myGame.platform.setPlatformX((int)(myGame.platform.getPlatformX() - myGame.platform.getSpeed() * delta));
 		}
 		if (myGame.goRight
 				&& myGame.platform.getPlatformX() < (Gdx.graphics.getWidth() - myGame.platform.getPlatformWidth())) {
-			myGame.platform.setPlatformX(myGame.platform.getPlatformX() + myGame.platform.getSpeed());
+			myGame.platform.setPlatformX((int)(myGame.platform.getPlatformX() + myGame.platform.getSpeed() * delta));
 		}
 	}
 
-	private void checkCollisionPlattform() {
+	private boolean checkCollisionPlattform() {
 		if (myGame.circle.getCircleX() + myGame.circle.getCircleR() > myGame.platform.getPlatformX()
 				&& myGame.circle.getCircleX() < myGame.platform.getPlatformX() + myGame.platform.getPlatformWidth()
 						+ myGame.circle.getCircleR()
@@ -123,25 +125,50 @@ public class MainScreen extends ScreenAdapter {
 				&& myGame.circle.getCircleY() + myGame.circle.getCircleR() >= myGame.platform.getPlatformY()
 						+ myGame.platform.getPlatformHeight()) {
 			myGame.circle.setSpeedY(Math.abs(myGame.circle.getSpeedY()));
+
+			if (myGame.goLeft && !myGame.hittedWithForce) {
+				myGame.circle.changeSpeedX(-(int) (myGame.platform.getSpeed() * myGame.platformToCircle));
+				if (myGame.circle.getSpeedX() < -myGame.platform.getSpeed()) {
+					myGame.circle.setSpeedX((int) (-myGame.platform.getSpeed() * 0.9));
+					System.out.println("speed gleich");
+				}
+				myGame.hittedWithForce = true;
+				System.out.println("X: " + myGame.circle.getSpeedX());
+				System.out.println("Y: " + myGame.circle.getSpeedY());
+				return true;
+			} else if (myGame.goRight && !myGame.hittedWithForce) {
+				myGame.circle.changeSpeedX((int) (myGame.platform.getSpeed() * myGame.platformToCircle));
+				if (myGame.circle.getSpeedX() > myGame.platform.getSpeed()) {
+					myGame.circle.setSpeedX((int) (myGame.platform.getSpeed() * 0.9));
+					System.out.println("speed gleich");
+				}
+				myGame.hittedWithForce = true;
+				System.out.println("X: " + myGame.circle.getSpeedX());
+				System.out.println("Y: " + myGame.circle.getSpeedY());
+				return true;
+			}
 		} else {
 
-			if (myGame.circle.getCircleX() + myGame.circle.getCircleR() >= myGame.platform.getPlatformX()
-					&& myGame.circle.getCircleX() - myGame.circle.getCircleR() <= myGame.platform.getPlatformX()
-					&& myGame.circle.getCircleY() - myGame.circle.getCircleR() <= myGame.platform.getPlatformY()
+			if (myGame.circle.getCircleRight() >= myGame.platform.getPlatformX()
+					&& myGame.circle.getCircleLeft() <= myGame.platform.getPlatformX()
+					&& myGame.circle.getCircleLeft() <= myGame.platform.getPlatformY()
 							+ myGame.platform.getPlatformHeight()
-					&& myGame.circle.getCircleY() + myGame.circle.getCircleR() >= myGame.platform.getPlatformY()) {
-				myGame.circle.setSpeedX(-Math.abs(myGame.circle.getSpeedX()));
+					&& myGame.circle.getCircleRight() >= myGame.platform.getPlatformY()) {
+				myGame.circle.setSpeedX(myGame.platform.getSpeed());
+				return true;
 			}
-			if (myGame.circle.getCircleX() - myGame.circle.getCircleR() <= myGame.platform.getPlatformX()
+			if (myGame.circle.getCircleLeft() <= myGame.platform.getPlatformX()
 					+ myGame.platform.getPlatformWidth()
-					&& myGame.circle.getCircleX() + myGame.circle.getCircleR() <= myGame.platform.getPlatformX()
+					&& myGame.circle.getCircleRight() <= myGame.platform.getPlatformX()
 							+ myGame.platform.getPlatformWidth()
-					&& myGame.circle.getCircleY() - myGame.circle.getCircleR() <= myGame.platform.getPlatformY()
+					&& myGame.circle.getCircleRight() <= myGame.platform.getPlatformY()
 							+ myGame.platform.getPlatformHeight()
-					&& myGame.circle.getCircleY() + myGame.circle.getCircleR() >= myGame.platform.getPlatformY()) {
-				myGame.circle.setSpeedX(Math.abs(myGame.circle.getSpeedX()));
+					&& myGame.circle.getCircleLeft() >= myGame.platform.getPlatformY()) {
+				myGame.circle.setSpeedX(-myGame.platform.getSpeed());
+				return true;
 			}
 		}
+		return false;
 	}
 
 	@Override

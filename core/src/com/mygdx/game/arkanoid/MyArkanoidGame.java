@@ -1,6 +1,7 @@
 package com.mygdx.game.arkanoid;
 
 import java.util.HashSet;
+import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -17,6 +18,8 @@ public class MyArkanoidGame extends Game {
 	ShapeRenderer shapeRenderer;
 	boolean goLeft = false;
 	boolean goRight = false;
+	boolean hittedWithForce = false;
+	float platformToCircle = 0.5f;
 	Circle circle;
 	Platform platform;
 	BitmapFont font;
@@ -31,17 +34,23 @@ public class MyArkanoidGame extends Game {
 	}
 
 	public void init() {
-		circle = new Circle(100, 100, 150, 150, 10);
+		Random dice = new Random();
+		circle = new Circle(Gdx.graphics.getWidth() / 2, 100, 1, 150, 10);
 		platform = new Platform(50, 10, (Gdx.graphics.getWidth() / 2) - 25, 30);
 		goLeft = false;
 		goRight = false;
 		level = new HashSet<>();
-		level.add(new Block(Color.GOLDENROD, 5, Gdx.graphics.getHeight() - 65, 30, 30));
-		level.add(new Block(Color.GOLDENROD, 40, Gdx.graphics.getHeight() - 65, 30, 30));
-		level.add(new Block(Color.GOLDENROD, 75, Gdx.graphics.getHeight() - 65, 30, 30));
-		level.add(new Block(Color.GOLDENROD, 110, Gdx.graphics.getHeight() - 65, 30, 30));
-		level.add(new Block(Color.GOLDENROD, 145, Gdx.graphics.getHeight() - 65, 30, 30));
-		level.add(new Block(Color.GOLDENROD, 180, Gdx.graphics.getHeight() - 65, 30, 30));
+		int g = 40;
+		int h = 5;
+		for (int j = 1; j <= 5; j++) {
+
+			Color color = new Color(dice.nextFloat(),dice.nextFloat(),dice.nextFloat(),1);
+				for (int i = 0; i < 18; i++) {
+
+				level.add(new Block(color, (30 * i) +(i+1)* h, Gdx.graphics.getHeight() - ((30 * j) + g), 30, 30));
+			}
+			g += 5;
+		}
 	}
 
 	@Override
@@ -50,6 +59,5 @@ public class MyArkanoidGame extends Game {
 		shapeRenderer.dispose();
 		font.dispose();
 	}
-
 
 }
