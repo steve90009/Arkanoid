@@ -47,6 +47,12 @@ public class Platform {
 	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
+	public int getPlatformUp() {
+		return platformY + platformHeight;
+	}
+	public int getPlatformRight() {
+		return platformX + platformWidth;
+	}
 
 	public Platform(int platformWidth, int platformHeight, int platformX, int platformY) {
 		super();

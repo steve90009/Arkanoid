@@ -7,6 +7,7 @@ public class Circle {
 	int speedX;
 	int speedY = 100;
 	int circleR = 10;
+	boolean hittedWithForce = false;
 
 	public int getCircleX() {
 		return circleX;
@@ -52,6 +53,14 @@ public class Circle {
 
 	public void setCircleR(int circleR) {
 		this.circleR = circleR;
+	}
+
+	public boolean isHittedWithForce() {
+		return hittedWithForce;
+	}
+
+	public void setHittedWithForce(boolean hittedWithForce) {
+		this.hittedWithForce = hittedWithForce;
 	}
 
 	public Circle(int circleX, int circleY, int speedX, int speedY, int circleR) {

@@ -8,6 +8,7 @@ public class Block {
 	private int blockY;
 	private int blockWidth;
 	private int blockHeight;
+	private PowerUpType type;
 
 	public Color getColor() {
 		return color;
@@ -49,13 +50,18 @@ public class Block {
 		this.blockHeight = blockHeight;
 	}
 
-	public Block(Color color, int blockX, int blockY, int blockWidth, int blockHeight) {
+	public PowerUpType getType() {
+		return type;
+	}
+
+	public Block(Color color, int blockX, int blockY, int blockWidth, int blockHeight, PowerUpType type) {
 		super();
 		this.color = color;
 		this.blockX = blockX;
 		this.blockY = blockY;
 		this.blockWidth = blockWidth;
 		this.blockHeight = blockHeight;
+		this.type = type;
 	}
 
 	public boolean checkHitUp(Circle circle) {
@@ -96,6 +102,9 @@ public class Block {
 			return true;
 		}
 		return false;
+	}
+	public boolean checkHit(Circle circle) {
+		return checkHitDown(circle) || checkHitUp(circle) || checkHitLeft(circle) || checkHitRight(circle);
 	}
 
 	private int getBlockUp() {
