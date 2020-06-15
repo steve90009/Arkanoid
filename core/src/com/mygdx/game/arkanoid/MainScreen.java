@@ -156,6 +156,9 @@ public class MainScreen extends ScreenAdapter {
 			myGame.setScreen(new GameOverScreen(myGame));
 
 		}
+		if (myGame.level.size() == 0) {
+			myGame.setScreen(new WinScreen(myGame));
+		}
 	}
 
 	private void activatePowerUps(HashSet<PowerUp> powerUps) {
